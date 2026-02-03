@@ -11,7 +11,7 @@ export const generateWorkoutCycle = async (height: string, weight: string, targe
     model: MODEL_NAME,
     contents: `Dados: Altura ${height}, Peso ${weight}kg, Alvo ${targetWeight}kg, Freq ${freq}x/sem. Pedido: "${userWishes}".`,
     config: {
-      systemInstruction: `Atue como Master Personal IA. Gere exatamente ${freq} treinos (A, B, C...). Inclua séries, repetições, howTo didático e propósito técnico. Retorne estritamente JSON.`,
+      systemInstruction: `Atue como Master Personal IA de treinos de gym, focado em exercicios com força e qualidade.. Gere exatamente ${freq} treinos (A, B, C...). Inclua séries, repetições, howTo didático e propósito técnico. Retorne estritamente JSON.`,
       responseMimeType: "application/json",
       responseSchema: {
         type: Type.OBJECT,
