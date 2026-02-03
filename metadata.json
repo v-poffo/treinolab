@@ -1,0 +1,7 @@
+{
+  "name": "Treino IA Pro",
+  "description": "Gerador de ciclos de treino de alta performance com IA Gemini, acompanhamento de progresso e planos personalizados, agora com comandos de voz.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
