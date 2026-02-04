@@ -5,16 +5,18 @@ import { WorkoutCycle, CardioSession } from "../types";
 const MODEL_NAME = 'gemini-3-flash-preview';
 
 export const generateWorkoutCycle = async (height: string, weight: string, targetWeight: string, freq: number, userWishes: string): Promise<WorkoutCycle> => {
+  // Obtém a chave diretamente do ambiente
   const apiKey = process.env.API_KEY;
-  if (!apiKey) throw new Error("Chave API_KEY não configurada no ambiente.");
   
-  const ai = new GoogleGenAI({ apiKey });
+  // Inicializa o AI apenas no momento do uso para pegar a chave mais recente
+  const ai = new GoogleGenAI({ apiKey: apiKey || "" });
+  
   try {
     const response = await ai.models.generateContent({
       model: MODEL_NAME,
-      contents: `Perfil: Altura ${height}, Peso ${weight}kg, Alvo ${targetWeight}kg, Frequência ${freq}x/semana. Pedido extra: "${userWishes}".`,
+      contents: `Atleta: ${height}m, ${weight}kg. Objetivo: ${targetWeight}kg. Frequência: ${freq}x. Detalhes: ${userWishes}`,
       config: {
-        systemInstruction: `Você é um Personal Trainer de elite. Gere um ciclo de musculação para ${freq} dias. Retorne APENAS um JSON seguindo o esquema definido. Use termos técnicos em português.`,
+        systemInstruction: "Você é um Personal Trainer. Gere um plano de musculação técnico. Retorne apenas JSON.",
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
@@ -35,93 +37,44 @@ export const generateWorkoutCycle = async (height: string, weight: string, targe
                         sets: { type: Type.STRING },
                         reps: { type: Type.STRING },
                         howTo: { type: Type.STRING }
-                      },
-                      required: ["name", "sets", "reps", "howTo"]
+                      }
                     }
                   }
-                },
-                required: ["category", "title", "exercises"]
+                }
               }
             }
-          },
-          required: ["days"]
+          }
         }
       }
     });
     
-    const parsed = JSON.parse(response.text || '{"days":[]}');
+    const text = response.text;
+    if (!text) throw new Error("A IA não retornou resposta.");
+    
+    const parsed = JSON.parse(text);
     return { ...parsed, generatedAt: new Date().toISOString(), totalCheckInsAtGeneration: 0 };
   } catch (error: any) {
-    console.error("Erro Gemini:", error);
-    throw new Error(error.message || "Falha na comunicação com Gemini");
+    console.error("Erro detalhado do Gemini:", error);
+    throw error;
   }
 };
 
-export const generateCardioLab = async (type: string): Promise<CardioSession> => {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) throw new Error("API_KEY ausente.");
-
-  const ai = new GoogleGenAI({ apiKey });
+export const generateCardioLab = async (type: string): Promise<any> => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
   const response = await ai.models.generateContent({
     model: MODEL_NAME,
-    contents: `Gere um protocolo de HIIT para ${type}.`,
-    config: {
-      systemInstruction: `Especialista em fisiologia do exercício. Gere um treino de cardio intenso. Retorne JSON.`,
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.OBJECT,
-        properties: {
-          duration: { type: Type.STRING },
-          intensity: { type: Type.STRING },
-          instructions: { type: Type.STRING },
-          didacticExplanation: { type: Type.STRING },
-          exercises: {
-            type: Type.ARRAY,
-            items: {
-              type: Type.OBJECT,
-              properties: {
-                name: { type: Type.STRING },
-                work: { type: Type.NUMBER },
-                rest: { type: Type.NUMBER },
-                howTo: { type: Type.STRING }
-              }
-            }
-          }
-        }
-      }
-    }
+    contents: `Gere um treino de HIIT para ${type}`,
+    config: { responseMimeType: "application/json" }
   });
-  const data = JSON.parse(response.text || '{}');
-  return { ...data, type: type as any };
+  return JSON.parse(response.text || "{}");
 };
 
 export const analyzeMeal = async (content: string): Promise<any> => {
-  const apiKey = process.env.API_KEY;
-  if (!apiKey) throw new Error("API_KEY ausente.");
-
-  const ai = new GoogleGenAI({ apiKey });
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
   const response = await ai.models.generateContent({
     model: MODEL_NAME,
-    contents: `Analise nutricionalmente: "${content}"`,
-    config: {
-      systemInstruction: `Nutricionista esportivo. Estime calorias e macros. Retorne JSON.`,
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.OBJECT,
-        properties: {
-          analysis: { type: Type.STRING },
-          calories: { type: Type.NUMBER },
-          macros: {
-            type: Type.OBJECT,
-            properties: {
-              protein: { type: Type.NUMBER },
-              carbs: { type: Type.NUMBER },
-              fat: { type: Type.NUMBER }
-            }
-          }
-        }
-      }
-    }
+    contents: `Analise: ${content}`,
+    config: { responseMimeType: "application/json" }
   });
-  return JSON.parse(response.text || '{}');
+  return JSON.parse(response.text || "{}");
 };
