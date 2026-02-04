@@ -11,7 +11,6 @@ const Icons = {
   Workout: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 12h12M6 8v8M18 8v8M2 11v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1ZM19 11v2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-1a1 1 0 0 0-1 1Z"/></svg>,
   Cardio: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5.5 17a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM18.5 17a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM12 17V10l4.2-3.4c.5-.4.6-1.1.2-1.6l-.6-.8M8 12l1.9 2 2-2.1"/></svg>,
   Abs: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10ZM8 10h8M8 14h8"/></svg>,
-  // Ícone de Nutrição: Garfo e Faca cruzados (estilo solicitado)
   Diet: () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M11 2L5.5 7.5L2 11l9 9l3.5-3.5L18 22"/>
@@ -24,7 +23,6 @@ const Icons = {
       <path d="M18 2v20"/><path d="M2 12s1 0 1 0c1.1 0 2-.9 2-2V2"/><path d="M2 12v10"/><path d="M9 12v10"/><path d="M9 12s-1 0-1 0c-1.1 0-2-.9-2-2V2"/><path d="M5.5 2v10"/>
     </svg>
   ),
-  // Ícone de Balança: Estilo solicitado
   Scale: () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M16 7a4 4 0 1 0-8 0"/><circle cx="12" cy="7" r="1"/><path d="M12 11v3"/><rect x="3" y="14" width="18" height="7" rx="1"/>
@@ -40,6 +38,9 @@ const Icons = {
   Flame: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="#4a7c59" stroke="none"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>,
   Info: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>,
   Check: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5"/></svg>,
+  Download: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
+  Upload: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>,
+  Cloud: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M17.5 19c2.5 0 4.5-2 4.5-4.5 0-2.3-1.7-4.2-4-4.5-1-3.5-4.2-6-8-6-3.8 0-7 2.5-8 6-2.3.3-4 2.2-4 4.5 0 2.5 2 4.5 4.5 4.5h15z"/></svg>,
 };
 
 const App: React.FC = () => {
@@ -56,6 +57,7 @@ const App: React.FC = () => {
   const [onboardingGender, setOnboardingGender] = useState<'M' | 'F' | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingMeal, setRecordingMeal] = useState<string | null>(null);
+  const [globalRankings, setGlobalRankings] = useState<any[]>([]);
 
   const [timer, setTimer] = useState({ running: false, mode: '', index: 0, time: 0, isRest: false });
   const timerRef = useRef<any>(null);
@@ -69,7 +71,87 @@ const App: React.FC = () => {
 
   useEffect(() => {
     localStorage.setItem('treino_lab_v25_final', JSON.stringify(profiles));
+    if (activeProfile) syncToCloud();
   }, [profiles]);
+
+  const syncToCloud = async () => {
+    if (!activeProfile || !activeProfile.groupId || !process.env.SUPABASE_URL) return;
+    try {
+      await fetch(`${process.env.SUPABASE_URL}/rest/v1/rankings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': process.env.SUPABASE_ANON_KEY || '',
+          'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify({
+          id: activeProfile.id,
+          name: activeProfile.name,
+          count: activeProfile.count,
+          group_id: activeProfile.groupId.toUpperCase()
+        })
+      });
+    } catch (e) { console.error("Erro ao sincronizar com nuvem:", e); }
+  };
+
+  const fetchGlobalRankings = async () => {
+    if (!activeProfile?.groupId || !process.env.SUPABASE_URL) {
+       setGlobalRankings([...profiles].sort((a,b) => b.count - a.count));
+       return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch(`${process.env.SUPABASE_URL}/rest/v1/rankings?group_id=eq.${activeProfile.groupId.toUpperCase()}&select=*&order=count.desc`, {
+        headers: {
+          'apikey': process.env.SUPABASE_ANON_KEY || '',
+          'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`
+        }
+      });
+      if (!res.ok) throw new Error("Falha na resposta do ranking.");
+      const data = await res.json();
+      setGlobalRankings(data);
+    } catch (e) { 
+      console.error(e);
+      alert("Erro ao buscar ranking global. Verifique sua conexão e chaves de API.");
+      setGlobalRankings([...profiles].sort((a,b) => b.count - a.count));
+    } finally { setLoading(false); }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'social') fetchGlobalRankings();
+  }, [activeTab]);
+
+  const exportBackup = () => {
+    const dataStr = JSON.stringify(profiles, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `backup_treino_lab_${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importBackup = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const json = JSON.parse(e.target?.result as string);
+        if (Array.isArray(json)) {
+          setProfiles(json);
+          alert("Backup restaurado com sucesso!");
+        } else {
+          alert("Formato de arquivo inválido.");
+        }
+      } catch (err) {
+        alert("Erro ao ler o arquivo de backup.");
+      }
+    };
+    reader.readAsText(file);
+  };
 
   const updateProfile = (updates: Partial<UserProfile>) => {
     if (!activeProfileId) return;
@@ -151,7 +233,7 @@ const App: React.FC = () => {
 
   const startVoiceInput = (mealKey?: string) => {
     const Recognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!Recognition) return alert("Microfone não suportado.");
+    if (!Recognition) return alert("Microfone ou Reconhecimento de Voz não suportado neste navegador.");
     const recognition = new Recognition();
     recognition.lang = 'pt-BR';
     recognition.onstart = () => { setIsRecording(true); if (mealKey) setRecordingMeal(mealKey); };
@@ -162,7 +244,7 @@ const App: React.FC = () => {
         updateProfile({ meals: { ...activeProfile.meals, [mealKey]: { ...activeProfile.meals[mealKey], text: (currentText + " " + transcript).trim() } } });
       } else { setUserBriefing(prev => (prev + " " + transcript).trim()); }
     };
-    recognition.onerror = () => { setIsRecording(false); setRecordingMeal(null); };
+    recognition.onerror = (e: any) => { console.error(e); setIsRecording(false); setRecordingMeal(null); };
     recognition.onend = () => { setIsRecording(false); setRecordingMeal(null); };
     recognition.start();
   };
@@ -180,7 +262,7 @@ const App: React.FC = () => {
             setTimer(t => ({ ...t, index: t.index + 1, isRest: false, time: currentLab.exercises![t.index+1].work }));
           } else {
             setTimer({ running: false, mode: '', index: 0, time: 0, isRest: false });
-            alert("Treino Lab Finalizado!");
+            alert("Sessão Bio-Lab Concluída com Sucesso!");
           }
         }
       } else if (currentLab?.intervals) {
@@ -198,35 +280,39 @@ const App: React.FC = () => {
   if (isOnboarding) {
     return (
       <div className="min-h-screen bg-petrol p-10 flex flex-col justify-center animate-in slide-in-from-bottom-12">
-        <h2 className="text-4xl font-black text-white mb-2 tracking-tighter uppercase italic">ATIVAR<br/><span className="text-leaf">BIO-LAB</span></h2>
-        <div className="space-y-6 mt-8">
-           <input id="ob-name" type="text" placeholder="Nome Completo" className="w-full bg-slate-900 border border-white/5 p-5 rounded-2xl text-white font-bold outline-none focus:border-leaf" />
+        <h2 className="text-4xl font-black text-white mb-2 tracking-tighter uppercase italic leading-none">ATIVAR<br/><span className="text-leaf">BIO-LAB</span></h2>
+        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-8">Defina seu código de grupo para o ranking</p>
+        <div className="space-y-4">
+           <input id="ob-group" type="text" placeholder="Código do Grupo (Ex: AMIGOS-VIP)" className="w-full bg-slate-900 border border-leaf/20 p-5 rounded-2xl text-leaf font-black outline-none focus:border-leaf uppercase" />
+           <input id="ob-name" type="text" placeholder="Nome do Atleta" className="w-full bg-slate-900 border border-white/5 p-5 rounded-2xl text-white font-bold outline-none focus:border-leaf" />
            <div className="flex gap-4">
-              <button onClick={() => setOnboardingGender('M')} className={`flex-1 py-4 rounded-2xl font-black text-[11px] uppercase border transition-all ${onboardingGender === 'M' ? 'bg-leaf border-leaf text-white' : 'bg-slate-800 border-white/5 text-slate-500'}`}>Masc</button>
-              <button onClick={() => setOnboardingGender('F')} className={`flex-1 py-4 rounded-2xl font-black text-[11px] uppercase border transition-all ${onboardingGender === 'F' ? 'bg-terracotta border-terracotta text-white' : 'bg-slate-800 border-white/5 text-slate-500'}`}>Fem</button>
+              <button onClick={() => setOnboardingGender('M')} className={`flex-1 py-4 rounded-2xl font-black text-[11px] uppercase border transition-all ${onboardingGender === 'M' ? 'bg-leaf border-leaf text-white' : 'bg-slate-800 border-white/5 text-slate-500'}`}>Masculino</button>
+              <button onClick={() => setOnboardingGender('F')} className={`flex-1 py-4 rounded-2xl font-black text-[11px] uppercase border transition-all ${onboardingGender === 'F' ? 'bg-terracotta border-terracotta text-white' : 'bg-slate-800 border-white/5 text-slate-500'}`}>Feminino</button>
            </div>
            <div className="grid grid-cols-2 gap-4">
               <input id="ob-h" type="text" placeholder="Altura (Ex: 1.75)" className="w-full bg-slate-900 border border-white/5 p-5 rounded-2xl text-white font-bold focus:border-leaf" />
-              <input id="ob-w" type="number" step="0.1" placeholder="Peso (kg)" className="w-full bg-slate-900 border border-white/5 p-5 rounded-2xl text-white font-bold focus:border-leaf" />
+              <input id="ob-w" type="number" step="0.1" placeholder="Peso Atual (kg)" className="w-full bg-slate-900 border border-white/5 p-5 rounded-2xl text-white font-bold focus:border-leaf" />
            </div>
-           <input id="ob-freq" type="number" placeholder="Treinos p/ semana" className="w-full bg-slate-900 border border-white/5 p-5 rounded-2xl text-white font-bold" />
+           <input id="ob-freq" type="number" placeholder="Treinos por semana" className="w-full bg-slate-900 border border-white/5 p-5 rounded-2xl text-white font-bold" />
            <input id="ob-target" type="number" step="0.1" placeholder="Peso Alvo (kg)" className="w-full bg-slate-900 border border-white/5 p-5 rounded-2xl text-white font-bold" />
            <button onClick={() => {
               const name = (document.getElementById('ob-name') as any).value;
+              const groupId = (document.getElementById('ob-group') as any).value;
               const h = (document.getElementById('ob-h') as any).value;
               const w = (document.getElementById('ob-w') as any).value;
               const t = (document.getElementById('ob-target') as any).value;
               const freq = (document.getElementById('ob-freq') as any).value;
-              if(!name || !w || !onboardingGender || !freq) return alert("Complete os dados.");
+              if(!name || !w || !onboardingGender || !freq) return alert("Por favor, preencha todos os campos obrigatórios.");
               const id = Date.now().toString();
               const p: UserProfile = {
-                id, name, gender: onboardingGender, height: h, targetWeight: t, trainingFrequency: parseInt(freq), trainingGoal: 'Performance',
+                id, name, groupId: groupId || undefined, gender: onboardingGender, height: h, targetWeight: t, trainingFrequency: parseInt(freq), trainingGoal: 'Performance',
                 weights: [{ date: new Date().toISOString(), value: parseFloat(w) }],
                 cycle: null, cardio: null, abs: null, count: 0, checkInDates: [], history: {},
                 meals: { 'Café': { text: '', analysis: '', calories: 0 }, 'Almoço': { text: '', analysis: '', calories: 0 }, 'Café Tarde': { text: '', analysis: '', calories: 0 }, 'Jantar': { text: '', analysis: '', calories: 0 } }
               };
               setProfiles([...profiles, p]); setActiveProfileId(id); setIsOnboarding(false);
-           }} className="w-full py-6 bg-leaf text-white rounded-[2rem] font-black uppercase shadow-xl hover:bg-terracotta transition-colors">INICIAR LABORATÓRIO</button>
+           }} className="w-full py-6 bg-leaf text-white rounded-[2rem] font-black uppercase shadow-xl hover:bg-terracotta transition-colors mt-4">INICIAR LABORATÓRIO</button>
+           <button onClick={() => setIsOnboarding(false)} className="w-full text-[10px] font-black text-slate-500 uppercase py-2">Voltar</button>
         </div>
       </div>
     );
@@ -234,19 +320,38 @@ const App: React.FC = () => {
 
   if (!activeProfile) {
     return (
-      <div className="min-h-screen bg-petrol flex flex-col items-center justify-center p-10">
+      <div className="min-h-screen bg-petrol flex flex-col items-center justify-center p-10 overflow-y-auto">
         <h1 className="text-7xl font-black tracking-tighter mb-12 flex flex-col items-center">
           <span className="text-leaf">TREINO</span>
           <span className="text-terracotta -mt-6">LAB</span>
         </h1>
         <div className="w-full max-w-xs space-y-4">
           {profiles.map(p => (
-            <button key={p.id} onClick={() => setActiveProfileId(p.id)} className="w-full p-8 glass rounded-[3rem] border border-white/5 flex justify-between items-center group hover:border-leaf transition-all shadow-xl">
-              <span className="font-black text-white text-sm uppercase">{p.name}</span>
-              <div className="text-leaf"><Icons.Social /></div>
+            <button key={p.id} onClick={() => setActiveProfileId(p.id)} className="w-full p-8 glass rounded-[3rem] border border-white/5 flex justify-between items-center group hover:border-leaf transition-all shadow-xl relative overflow-hidden">
+              <div className="flex flex-col items-start z-10">
+                <span className="font-black text-white text-sm uppercase">{p.name}</span>
+                {p.groupId && <span className="text-[8px] font-black text-leaf bg-leaf/10 px-2 py-0.5 rounded-full mt-1">GRUPO: {p.groupId.toUpperCase()}</span>}
+              </div>
+              <div className="text-leaf z-10"><Icons.Social /></div>
+              <div className="absolute right-0 bottom-0 w-12 h-12 bg-leaf/5 rounded-tl-full"></div>
             </button>
           ))}
           <button onClick={() => setIsOnboarding(true)} className="w-full py-8 border-2 border-dashed border-white/10 rounded-[3rem] text-white/30 font-black uppercase hover:text-leaf transition-all hover:border-leaf">+ NOVO ATLETA</button>
+          
+          <div className="pt-8 space-y-3">
+             <p className="text-[10px] font-black text-slate-600 uppercase text-center tracking-widest">Opções de Dados</p>
+             <div className="flex gap-2">
+                <button onClick={exportBackup} className="flex-1 py-4 bg-slate-900 border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-2 text-slate-400 hover:text-leaf hover:border-leaf transition-all">
+                   <Icons.Download />
+                   <span className="text-[8px] font-black uppercase">Exportar</span>
+                </button>
+                <label className="flex-1 py-4 bg-slate-900 border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-2 text-slate-400 hover:text-terracotta hover:border-terracotta transition-all cursor-pointer text-center px-2">
+                   <Icons.Upload />
+                   <span className="text-[8px] font-black uppercase">Importar</span>
+                   <input type="file" accept=".json" onChange={importBackup} className="hidden" />
+                </label>
+             </div>
+          </div>
         </div>
       </div>
     );
@@ -256,12 +361,18 @@ const App: React.FC = () => {
     <div className="min-h-screen pb-32 bg-petrol text-slate-100">
       <header className="sticky top-0 z-50 glass border-b border-white/5">
          <div className="p-6 flex justify-between items-center">
-            <div className="flex items-center gap-3">
+            <button onClick={() => setActiveProfileId(null)} className="flex items-center gap-3 text-left">
                <div className="w-10 h-10 bg-leaf rounded-xl flex items-center justify-center text-white font-black text-lg">{activeProfile.name.charAt(0)}</div>
-               <h2 className="text-sm font-black uppercase tracking-widest text-terracotta">{activeProfile.name.split(' ')[0]}</h2>
-            </div>
-            <div className="flex items-center gap-2 bg-leaf/10 px-4 py-1.5 rounded-full border border-leaf/20">
-               <Icons.Flame /><span className="text-xs font-black text-leaf">{streak}</span>
+               <div>
+                  <h2 className="text-sm font-black uppercase tracking-widest text-terracotta leading-none">{activeProfile.name.split(' ')[0]}</h2>
+                  {activeProfile.groupId && <span className="text-[7px] font-black text-slate-500 uppercase tracking-tighter">LAB: {activeProfile.groupId}</span>}
+               </div>
+            </button>
+            <div className="flex items-center gap-3">
+               {activeProfile.groupId && process.env.SUPABASE_URL && <div className="text-leaf animate-pulse"><Icons.Cloud /></div>}
+               <div className="flex items-center gap-2 bg-leaf/10 px-4 py-1.5 rounded-full border border-leaf/20">
+                  <Icons.Flame /><span className="text-xs font-black text-leaf">{streak}</span>
+               </div>
             </div>
          </div>
          <div className="px-6 pb-6 flex justify-between items-center gap-2 overflow-x-auto">
@@ -284,7 +395,6 @@ const App: React.FC = () => {
 
       <main className="max-w-md mx-auto p-6 space-y-10">
         
-        {/* TREINO TAB */}
         {activeTab === 'treino' && !detailView && (
           <div className="space-y-6 animate-in slide-in-from-bottom-4">
              <div className="glass p-10 rounded-[4rem] space-y-6 border border-white/5 shadow-2xl">
@@ -294,12 +404,15 @@ const App: React.FC = () => {
                      <Icons.Mic />
                    </button>
                 </div>
-                <textarea value={userBriefing} onChange={e => setUserBriefing(e.target.value)} placeholder="Preferências: Foco em glúteo, bíceps..." className="w-full h-24 bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none focus:border-leaf text-white" />
+                <textarea value={userBriefing} onChange={e => setUserBriefing(e.target.value)} placeholder="Ex: Foco em glúteos e pernas, treino rápido de 40min..." className="w-full h-24 bg-black/20 border border-white/5 rounded-2xl p-4 text-sm outline-none focus:border-leaf text-white" />
                 <button onClick={async () => {
                   setLoading(true); 
                   try {
                     const res = await generateWorkoutCycle(activeProfile.height, activeProfile.weights[activeProfile.weights.length-1].value.toString(), activeProfile.targetWeight, activeProfile.trainingFrequency, userBriefing);
                     updateProfile({ cycle: { ...res, totalCheckInsAtGeneration: activeProfile.count } });
+                  } catch (err) {
+                    console.error(err);
+                    alert("Erro ao conectar com a IA. Verifique se a API_KEY está configurada corretamente nas variáveis de ambiente da Vercel.");
                   } finally { setLoading(false); }
                 }} className="w-full py-5 bg-leaf text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl active:scale-95 transition-all hover:bg-terracotta">Sincronizar Ciclo</button>
              </div>
@@ -341,12 +454,54 @@ const App: React.FC = () => {
                      history: { ...activeProfile.history, [today]: { ...activeProfile.history[today], date: today, workoutDone: detailView.category } }
                    }); 
                    setDetailView(null);
-                }} className="w-full py-7 bg-leaf text-white rounded-[3rem] font-black uppercase tracking-[0.2em] shadow-xl mt-6">Confirmar Lab</button>
+                   alert("Check-in realizado! +1 sessão Bio-Lab.");
+                }} className="w-full py-7 bg-leaf text-white rounded-[3rem] font-black uppercase tracking-[0.2em] shadow-xl mt-6">Confirmar Sessão</button>
              </div>
           </div>
         )}
 
-        {/* CARDIO / ABS TAB: Seção Restaurada e Corrigida */}
+        {activeTab === 'social' && (
+           <div className="space-y-8 animate-in slide-in-from-bottom-4">
+              <div className="text-center space-y-2">
+                <h3 className="text-4xl font-black uppercase tracking-tighter leading-none italic flex flex-col">
+                  <span className="text-leaf">BIO-LAB</span>
+                  <span className="text-terracotta">RANKING</span>
+                </h3>
+                {activeProfile.groupId ? (
+                   <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest bg-slate-900 py-2 rounded-full inline-block px-6 border border-white/5">Grupo: {activeProfile.groupId}</p>
+                ) : (
+                   <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest italic opacity-50">Sincronização Desativada</p>
+                )}
+              </div>
+              
+              <div className="space-y-4">
+                 {globalRankings.map((p, i) => (
+                    <div key={p.id} className={`glass p-8 rounded-[3.5rem] flex justify-between items-center group border transition-all shadow-xl ${p.id === activeProfile.id ? 'border-leaf/50 bg-leaf/5' : 'border-white/5 hover:border-leaf/30'}`}>
+                       <div className="flex items-center gap-6">
+                          <span className={`text-2xl font-black ${i === 0 ? 'text-leaf' : i === 1 ? 'text-gold' : i === 2 ? 'text-terracotta' : 'text-slate-600'}`}>{i+1}</span>
+                          <div className="text-left">
+                             <p className="font-black text-white text-sm uppercase tracking-widest">{p.name}</p>
+                             <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest">Célula Ativa</p>
+                          </div>
+                       </div>
+                       <div className="flex items-center gap-4">
+                          <div className="px-5 py-2 bg-leaf/10 rounded-2xl border border-leaf/20 text-leaf font-black text-[12px] shadow-inner">{p.count} <span className="text-[8px] uppercase ml-0.5">Treinos</span></div>
+                          {p.id !== activeProfile.id && profiles.find(pr => pr.id === p.id) && (
+                             <button onClick={() => setActiveProfileId(p.id)} className="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center text-white hover:bg-leaf active:scale-90 transition-all"><Icons.Check /></button>
+                          )}
+                       </div>
+                    </div>
+                 ))}
+                 
+                 {globalRankings.length === 0 && (
+                    <div className="py-20 text-center opacity-30 italic font-black text-sm uppercase">Nenhum dado sincronizado ainda</div>
+                 )}
+              </div>
+
+              <button onClick={fetchGlobalRankings} className="w-full py-4 text-[10px] font-black text-leaf uppercase tracking-widest border border-leaf/20 rounded-full hover:bg-leaf/5 transition-all">Atualizar Ranking Amigos</button>
+           </div>
+        )}
+
         {(activeTab === 'cardio' || activeTab === 'abs') && !detailView && (
            <div className="space-y-8 animate-in slide-in-from-bottom-4 text-center">
               <h3 className="text-3xl font-black text-white uppercase px-4 tracking-tighter leading-none">LABORATÓRIO<br/><span className="text-leaf">{activeTab === 'cardio' ? 'HIIT' : 'CORE'}</span></h3>
@@ -356,6 +511,8 @@ const App: React.FC = () => {
                        setLoading(true); try {
                           const res = await generateCardioLab(type); 
                           updateProfile({ [activeTab]: res } as any); setDetailView(res);
+                       } catch (err) {
+                          alert("Erro ao conectar com a IA. Verifique sua API_KEY na Vercel.");
                        } finally { setLoading(false); }
                     }} className="glass p-14 rounded-[5rem] border border-white/5 hover:border-leaf transition-all flex justify-between items-center group shadow-xl">
                        <div className="text-left">
@@ -414,7 +571,6 @@ const App: React.FC = () => {
            </div>
         )}
 
-        {/* DIETA TAB: Nutrição Master */}
         {activeTab === 'dieta' && (
            <div className="space-y-8 animate-in slide-in-from-bottom-4">
               <div className="glass p-12 rounded-[5rem] border-white/5 space-y-10 text-center shadow-2xl relative overflow-hidden">
@@ -437,11 +593,13 @@ const App: React.FC = () => {
                           <div className="p-3 bg-slate-900 rounded-2xl text-leaf"><Icons.ForkKnife /></div>
                        </div>
                     </div>
-                    <input type="text" value={activeProfile.meals[m].text} onChange={e => updateProfile({ meals: { ...activeProfile.meals, [m]: { ...activeProfile.meals[m], text: e.target.value } } })} className="w-full bg-black/20 border border-white/5 rounded-2xl p-6 text-sm outline-none focus:border-leaf text-white" placeholder="O que consumiu?" />
+                    <input type="text" value={activeProfile.meals[m].text} onChange={e => updateProfile({ meals: { ...activeProfile.meals, [m]: { ...activeProfile.meals[m], text: e.target.value } } })} className="w-full bg-black/20 border border-white/5 rounded-2xl p-6 text-sm outline-none focus:border-leaf text-white" placeholder="Descreva sua refeição..." />
                     <button onClick={async () => {
                        setLoading(true); try {
                           const res = await analyzeMeal(activeProfile.meals[m].text);
                           updateProfile({ meals: { ...activeProfile.meals, [m]: { ...activeProfile.meals[m], analysis: res.analysis, calories: res.calories, macros: res.macros } } });
+                       } catch (err) {
+                          alert("Erro ao analisar refeição com IA.");
                        } finally { setLoading(false); }
                     }} className="text-[10px] font-black text-white uppercase tracking-[0.3em] bg-leaf py-4 px-8 rounded-3xl active:scale-95 transition-all hover:bg-terracotta shadow-md">Analisar Refeição</button>
                     {activeProfile.meals[m].calories > 0 && <p className="text-[11px] text-slate-400 font-bold border-l-2 border-leaf/40 pl-5 italic leading-relaxed">{activeProfile.meals[m].analysis}</p>}
@@ -450,7 +608,6 @@ const App: React.FC = () => {
            </div>
         )}
 
-        {/* PROGRESSO TAB: Peso & Biometria */}
         {activeTab === 'progresso' && (
            <div className="space-y-10 animate-in slide-in-from-bottom-4">
               <div className="glass p-12 rounded-[5.5rem] flex justify-around items-center border border-leaf/20 shadow-2xl relative">
@@ -481,7 +638,7 @@ const App: React.FC = () => {
                        const waist = parseFloat((document.getElementById('new-waist-val') as any)?.value || "0");
                        const neck = parseFloat((document.getElementById('new-neck-val') as any)?.value || "0");
                        const hips = parseFloat((document.getElementById('new-hips-val') as any)?.value || "0");
-                       if(!v) return alert("Insira o peso.");
+                       if(!v) return alert("Por favor, insira o peso.");
                        const entry: WeightEntry = { 
                           date: new Date().toISOString(), 
                           value: v, 
@@ -500,7 +657,6 @@ const App: React.FC = () => {
            </div>
         )}
 
-        {/* CALENDAR TAB */}
         {activeTab === 'calendar' && (
            <div className="space-y-10 animate-in slide-in-from-bottom-4">
               <div className="glass p-10 rounded-[4.5rem] shadow-2xl border border-white/5">
@@ -543,30 +699,6 @@ const App: React.FC = () => {
            </div>
         )}
 
-        {/* SOCIAL TAB: Elite Ranking */}
-        {activeTab === 'social' && (
-           <div className="space-y-8 animate-in slide-in-from-bottom-4">
-              <h3 className="text-4xl font-black uppercase px-4 tracking-tighter leading-none text-center italic flex flex-col">
-                <span className="text-leaf">ELITE</span>
-                <span className="text-terracotta">RANKING</span>
-              </h3>
-              <div className="space-y-4">
-                 {profiles.sort((a,b) => b.count - a.count).map((p, i) => (
-                    <div key={p.id} className="glass p-8 rounded-[3.5rem] flex justify-between items-center group border border-white/5 hover:border-leaf/30 transition-all shadow-xl">
-                       <div className="flex items-center gap-6">
-                          <span className={`text-2xl font-black ${i === 0 ? 'text-leaf' : 'text-slate-600'}`}>{i+1}</span>
-                          <div className="text-left"><p className="font-black text-white text-sm uppercase tracking-widest">{p.name}</p><p className="text-[10px] text-terracotta font-bold uppercase">{p.trainingGoal}</p></div>
-                       </div>
-                       <div className="flex items-center gap-4">
-                          <div className="px-4 py-2 bg-leaf/10 rounded-2xl border border-leaf/20 text-leaf font-black text-[10px]">{p.count} SES</div>
-                          <button onClick={() => setActiveProfileId(p.id)} className="w-12 h-12 bg-slate-800 rounded-2xl flex items-center justify-center text-white hover:bg-leaf active:scale-90 transition-all"><Icons.Check /></button>
-                       </div>
-                    </div>
-                 ))}
-              </div>
-           </div>
-        )}
-
       </main>
 
       <nav className="fixed bottom-10 left-1/2 -translate-x-1/2 glass border-white/10 p-3 rounded-[4rem] shadow-2xl flex gap-2.5 z-50">
@@ -583,7 +715,7 @@ const App: React.FC = () => {
               <div className="w-24 h-24 border-2 border-white/10 border-t-leaf rounded-full animate-spin"></div>
               <div className="absolute inset-0 flex items-center justify-center"><div className="w-2 h-2 bg-leaf rounded-full animate-ping"></div></div>
            </div>
-           <p className="mt-12 text-[12px] font-black text-leaf uppercase tracking-[1em] animate-pulse">PROCESSANDO...</p>
+           <p className="mt-12 text-[12px] font-black text-leaf uppercase tracking-[1em] animate-pulse">SINCRONIZANDO COM A IA...</p>
         </div>
       )}
     </div>

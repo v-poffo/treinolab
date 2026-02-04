@@ -10,7 +10,7 @@ export interface Exercise {
 }
 
 export interface WorkoutDay {
-  category: string; // 'A', 'B', 'C', 'D'
+  category: string;
   title: string;
   exercises: Exercise[];
 }
@@ -57,6 +57,7 @@ export interface UserProfile {
   targetWeight: string;
   trainingFrequency: number;
   trainingGoal: string;
+  groupId?: string; // NOVO: Para agrupar amigos
   weights: WeightEntry[];
   cycle: WorkoutCycle | null;
   cardio: CardioSession | null;

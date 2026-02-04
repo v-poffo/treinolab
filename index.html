@@ -7,6 +7,9 @@
     <title>TREINO LAB - Petrol & Sage Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+      // Garante que o objeto process.env exista no navegador para evitar erros de referência
+      window.process = window.process || { env: {} };
+      
       tailwind.config = {
         theme: {
           extend: {

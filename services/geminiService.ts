@@ -6,12 +6,16 @@ import { WorkoutCycle, CardioSession } from "../types";
 const MODEL_NAME = 'gemini-3-flash-preview';
 
 export const generateWorkoutCycle = async (height: string, weight: string, targetWeight: string, freq: number, userWishes: string): Promise<WorkoutCycle> => {
+  if (!process.env.API_KEY) {
+    throw new Error("A chave API_KEY não foi encontrada no ambiente.");
+  }
+  
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const response = await ai.models.generateContent({
     model: MODEL_NAME,
     contents: `Dados: Altura ${height}, Peso ${weight}kg, Alvo ${targetWeight}kg, Freq ${freq}x/sem. Pedido: "${userWishes}".`,
     config: {
-      systemInstruction: `Atue como Master Personal IA de treinos de gym, focado em exercicios com força e qualidade.. Gere exatamente ${freq} treinos (A, B, C...). Inclua séries, repetições, howTo didático e propósito técnico. Retorne estritamente JSON.`,
+      systemInstruction: `Atue como Master Personal IA. Gere exatamente ${freq} treinos (A, B, C...). Inclua séries, repetições, howTo didático e propósito técnico. Retorne estritamente JSON.`,
       responseMimeType: "application/json",
       responseSchema: {
         type: Type.OBJECT,
@@ -54,6 +58,10 @@ export const generateWorkoutCycle = async (height: string, weight: string, targe
 };
 
 export const generateCardioLab = async (type: 'Bike' | 'Corrida' | 'Funcional' | 'Abs'): Promise<CardioSession> => {
+  if (!process.env.API_KEY) {
+    throw new Error("A chave API_KEY não foi encontrada no ambiente.");
+  }
+
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const response = await ai.models.generateContent({
     model: MODEL_NAME,
@@ -105,6 +113,10 @@ export const generateCardioLab = async (type: 'Bike' | 'Corrida' | 'Funcional' |
 };
 
 export const analyzeMeal = async (content: string): Promise<any> => {
+  if (!process.env.API_KEY) {
+    throw new Error("A chave API_KEY não foi encontrada no ambiente.");
+  }
+
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const response = await ai.models.generateContent({
     model: MODEL_NAME,
